@@ -1,7 +1,7 @@
 
 CS 541 - Game Development for Mobile Platforms {Spring 2019}
 
-Project 7 - Android Application  :  Time Tracker
+Project 7/8 - Android Application  :  Time Tracker
 
 This is the adnroid application to track your daily tasks. It will have below components - 
 
