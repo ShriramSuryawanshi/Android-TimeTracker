@@ -1,5 +1,6 @@
 package shree.e.timetracker;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,12 +47,14 @@ public class MainActivity extends AppCompatActivity {
                     editor.apply();
                     Toast.makeText(this, "Welcome to TimeTracker!", Toast.LENGTH_LONG).show();
                     // Show add tasklist page
+                    startActivity(new Intent(MainActivity.this, TaskList.class));
             }
             else {
 
                 if(username.compareTo(savedUser) == 0 && password.compareTo(savedPass) == 0) {
                     Toast.makeText(this, "Welcome back to TimeTracker!", Toast.LENGTH_LONG).show();
                     // Show main window
+                    startActivity(new Intent(MainActivity.this, AddTask.class));
                 }
                 else {
                     editTextUsername.setText("");
