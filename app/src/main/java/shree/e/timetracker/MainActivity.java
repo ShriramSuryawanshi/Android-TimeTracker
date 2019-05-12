@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 if(username.compareTo(savedUser) == 0 && password.compareTo(savedPass) == 0) {
                     Toast.makeText(this, "Welcome back to TimeTracker!", Toast.LENGTH_LONG).show();
                     // Show main window
-                    startActivity(new Intent(MainActivity.this, AddTask.class));
+                    startActivity(new Intent(MainActivity.this, Today.class));
                 }
                 else {
                     editTextUsername.setText("");
