@@ -149,6 +149,9 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
     }
 
 
+
+
+
     /* -------------------------------- START : Home Screen ------------------------------------------------------------- */
 
 
@@ -163,55 +166,7 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
     /* -------------------------------- START : Add New Tasks ------------------------------------------------------------- */
 
 
-  /*  public void setAddTaskFrame() {
-
-
-
-        String currentTime = java.text.DateFormat.getTimeInstance().format(new Date());
-        editTextStartTime.setText(currentTime);
-        editTextEndTime.setText(currentTime);
-
-        addTaskFrame.setVisibility(View.VISIBLE);
-        editTaskFrame.setVisibility(View.INVISIBLE);
-    }
-
-
-    public void getStartTime(View view) {
-
-        datePickerType = "start";
-        DialogFragment timePicker = new TimePickerFragment();
-        timePicker.show(getSupportFragmentManager(), "Start Time Picker");
-    }
-
-
-    public void getEndTime(View view) {
-
-        datePickerType = "end";
-        DialogFragment timePicker = new TimePickerFragment();
-        timePicker.show(getSupportFragmentManager(), "End Time Picker");
-    }
-
-
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-        boolean isPM = (hourOfDay >= 12);
-
-        if(datePickerType.compareTo("") == 0) {
-
-            editTextStartTime.setText(String.format("%02d:%02d %s", (hourOfDay == 12 || hourOfDay == 0) ? 12 : hourOfDay % 12, minute, isPM ? "PM" : "AM"));
-            editTextEndTime.setText(String.format("%02d:%02d %s", (hourOfDay == 12 || hourOfDay == 0) ? 12 : hourOfDay % 12, minute, isPM ? "PM" : "AM"));
-        }
-        else if(datePickerType.compareTo("start") == 0)     editTextStartTime.setText(String.format("%02d:%02d %s", (hourOfDay == 12 || hourOfDay == 0) ? 12 : hourOfDay % 12, minute, isPM ? "PM" : "AM"));
-        else if(datePickerType.compareTo("end") == 0)       editTextEndTime.setText(String.format("%02d:%02d %s", (hourOfDay == 12 || hourOfDay == 0) ? 12 : hourOfDay % 12, minute, isPM ? "PM" : "AM"));
-    }
-
-
-    public void submitEntry(View view) {
-
-        String start = editTextStartTime.getText().toString();
-        String end = editTextEndTime.getText().toString();
-
-    }
+  /*
 
 
     /* -------------------------------- END : Add New Tasks ------------------------------------------------------------- */

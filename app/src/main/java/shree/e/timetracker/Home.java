@@ -17,8 +17,6 @@ import java.util.Date;
 
 public class Home extends Fragment {
 
-    View myView;
-
     CalendarView calendarViewHome;
 
     TextView textViewHomeDate;
@@ -26,14 +24,13 @@ public class Home extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.layout_home, null);
+        return inflater.inflate(R.layout.mylayout_home, null);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        myView = view;
 
         calendarViewHome = view.findViewById(R.id.calendarViewHome);
 

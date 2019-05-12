@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 public class Empty extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.layout_empty, null);
+        return inflater.inflate(R.layout.mylayout_empty, null);
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
