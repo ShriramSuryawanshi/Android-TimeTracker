@@ -38,15 +38,7 @@ import java.util.Date;
 
 public class Today extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String datePickerType = "";
     String currentFrame = "Home";
-
-    EditText editTextStartTime;
-    EditText editTextEndTime;
-    EditText editTextTaskTitle;
-
-    RelativeLayout addTaskFrame;
-    RelativeLayout editTaskFrame;
 
     SQLiteDatabase myDB;
 
@@ -64,13 +56,6 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
-
-
-
-
-
         try  {
             myDB = this.openOrCreateDatabase("myDB", MODE_PRIVATE, null);
             myDB.execSQL("CREATE TABLE IF NOT EXISTS Summary (Date VARCHAR PRIMARY KEY, Task1 VARCHAR, Task2 VARCHAR, Task3 VARCHAR, Task4 VARCHAR, Task5 VARCHAR, Task6 VARCHAR, Task7 VARCHAR, Task8 VARCHAR, Task9 VARCHAR, Task10 VARCHAR)");
@@ -78,17 +63,12 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
         catch(Exception e) {
             Toast.makeText(this, "Database Error - " + e.toString(), Toast.LENGTH_LONG).show();
         }
-
-
-
-
-
-
     }
 
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -99,19 +79,16 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.today, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -128,12 +105,7 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
 
         if (id == R.id.nav_home)             fragment = new Home();
         else if (id == R.id.nav_new)         fragment = new NewTask();
-        else if (id == R.id.nav_settings) {
-
-            currentFrame = "Settings";
-
-
-        }
+        else if (id == R.id.nav_summary)     fragment = new Summary();
 
         if(fragment != null) {
 
@@ -147,51 +119,4 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
-
-
-    /* -------------------------------- START : Home Screen ------------------------------------------------------------- */
-
-
-
-
-
-
-
-    /* -------------------------------- END : Home Screen ------------------------------------------------------------- */
-
-
-    /* -------------------------------- START : Add New Tasks ------------------------------------------------------------- */
-
-
-  /*
-
-
-    /* -------------------------------- END : Add New Tasks ------------------------------------------------------------- */
-
-
-    /* -------------------------------- START : Edit Task List ------------------------------------------------------------- */
-
-  /*  public void setEditTaskFrame() {
-
-
-        addTaskFrame.setVisibility(View.INVISIBLE);
-        editTaskFrame.setVisibility(View.VISIBLE);
-    }
-
-
-    public void submitNewTask() {
-
-
-    }
-
-
-    public void showTaskList() {
-
-
-    }
-
-    /* -------------------------------- END : Edit Task List ------------------------------------------------------------- */
 }

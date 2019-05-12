@@ -14,8 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
-public class Home extends Fragment {
+public class Summary extends Fragment {
 
     CalendarView calendarViewHome;
 

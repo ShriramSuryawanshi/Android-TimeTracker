@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListener {
-    
+
     CalendarView calendarViewNewTask;
 
     TextView textViewNewTaskDate;
