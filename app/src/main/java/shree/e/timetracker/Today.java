@@ -2,10 +2,15 @@ package shree.e.timetracker;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -30,19 +36,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Today extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener {
+public class Today extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     String datePickerType = "";
     String currentFrame = "Home";
 
     EditText editTextStartTime;
     EditText editTextEndTime;
-
-    TextView textViewHomeDate;
-
-    CalendarView calendarViewHome;
+    EditText editTextTaskTitle;
 
     RelativeLayout addTaskFrame;
+    RelativeLayout editTaskFrame;
+
+    SQLiteDatabase myDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,41 +65,25 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        addTaskFrame = findViewById(R.id.AddTaskFrame);
-
-        editTextStartTime = findViewById(R.id.editTextStartTime);
-        editTextEndTime = findViewById(R.id.editTextEndTime);
-
-        textViewHomeDate = findViewById(R.id.textViewHomeDate);
-
-        calendarViewHome = findViewById(R.id.calendarViewHome);
 
 
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
-        String formattedDate = df.format(c);
-        textViewHomeDate.setText(formattedDate);
 
-        setHomeFrame();
 
-        calendarViewHome.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month,int dayOfMonth) {
 
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.YEAR, year);
-                cal.set(Calendar.MONTH, month);
-                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                Date dateRepresentation = cal.getTime();
-                SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
-                String formattedDate = df.format(dateRepresentation);
-                textViewHomeDate.setText(formattedDate);
-                calendarViewHome.setVisibility(View.INVISIBLE);
 
-                if(currentFrame.compareTo("Home") == 0)                     setHomeFrame();
-                else if (currentFrame.compareTo("AddTask") == 0)            setAddTaskFrame();
-            }
-        });
+        try  {
+            myDB = this.openOrCreateDatabase("myDB", MODE_PRIVATE, null);
+            myDB.execSQL("CREATE TABLE IF NOT EXISTS Summary (Date VARCHAR PRIMARY KEY, Task1 VARCHAR, Task2 VARCHAR, Task3 VARCHAR, Task4 VARCHAR, Task5 VARCHAR, Task6 VARCHAR, Task7 VARCHAR, Task8 VARCHAR, Task9 VARCHAR, Task10 VARCHAR)");
+        }
+        catch(Exception e) {
+            Toast.makeText(this, "Database Error - " + e.toString(), Toast.LENGTH_LONG).show();
+        }
+
+
+
+
+
+
     }
 
 
@@ -134,31 +124,24 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
     public boolean onNavigationItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+        Fragment fragment = null;
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_home)             fragment = new Home();
+        else if (id == R.id.nav_new)         fragment = new NewTask();
+        else if (id == R.id.nav_settings) {
 
-            Date c = Calendar.getInstance().getTime();
-            SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
-            String formattedDate = df.format(c);
-            textViewHomeDate.setText(formattedDate);
+            currentFrame = "Settings";
 
-            currentFrame = "Home";
 
-            setHomeFrame();
-
-        } else if (id == R.id.nav_new) {
-
-            Date c = Calendar.getInstance().getTime();
-            SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
-            String formattedDate = df.format(c);
-            textViewHomeDate.setText(formattedDate);
-
-            currentFrame = "AddTask";
-
-            setAddTaskFrame();
         }
 
+        if(fragment != null) {
 
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.screen_area, fragment);
+            fragmentTransaction.commit();
+        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -168,34 +151,28 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
 
     /* -------------------------------- START : Home Screen ------------------------------------------------------------- */
 
-    public void setHomeFrame() {
-
-        calendarViewHome.setVisibility(View.INVISIBLE);
-        addTaskFrame.setVisibility(View.INVISIBLE);
-    }
 
 
-    public void changeDate(View view) {
 
-        calendarViewHome.setVisibility(View.VISIBLE);
-        addTaskFrame.setVisibility(View.INVISIBLE);
-    }
+
 
 
     /* -------------------------------- END : Home Screen ------------------------------------------------------------- */
 
+
     /* -------------------------------- START : Add New Tasks ------------------------------------------------------------- */
 
 
-    public void setAddTaskFrame() {
+  /*  public void setAddTaskFrame() {
 
-        calendarViewHome.setVisibility(View.INVISIBLE);
+
 
         String currentTime = java.text.DateFormat.getTimeInstance().format(new Date());
         editTextStartTime.setText(currentTime);
         editTextEndTime.setText(currentTime);
 
         addTaskFrame.setVisibility(View.VISIBLE);
+        editTaskFrame.setVisibility(View.INVISIBLE);
     }
 
 
@@ -230,7 +207,7 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
 
 
     public void submitEntry(View view) {
-        
+
         String start = editTextStartTime.getText().toString();
         String end = editTextEndTime.getText().toString();
 
@@ -238,4 +215,28 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
 
 
     /* -------------------------------- END : Add New Tasks ------------------------------------------------------------- */
+
+
+    /* -------------------------------- START : Edit Task List ------------------------------------------------------------- */
+
+  /*  public void setEditTaskFrame() {
+
+
+        addTaskFrame.setVisibility(View.INVISIBLE);
+        editTaskFrame.setVisibility(View.VISIBLE);
+    }
+
+
+    public void submitNewTask() {
+
+
+    }
+
+
+    public void showTaskList() {
+
+
+    }
+
+    /* -------------------------------- END : Edit Task List ------------------------------------------------------------- */
 }
