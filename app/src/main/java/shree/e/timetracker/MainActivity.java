@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
                     editor.apply();
                     Toast.makeText(this, "Welcome to TimeTracker!", Toast.LENGTH_LONG).show();
                     // Show add tasklist page
-                    startActivity(new Intent(MainActivity.this, TaskList.class));
             }
             else {
 
