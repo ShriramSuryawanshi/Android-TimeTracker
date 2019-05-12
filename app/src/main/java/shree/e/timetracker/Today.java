@@ -33,6 +33,7 @@ import java.util.Date;
 public class Today extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener {
 
     String datePickerType = "";
+    String currentFrame = "Home";
 
     EditText editTextStartTime;
     EditText editTextEndTime;
@@ -68,8 +69,12 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
         calendarViewHome = findViewById(R.id.calendarViewHome);
 
 
-        setHomeFrame();
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
+        String formattedDate = df.format(c);
+        textViewHomeDate.setText(formattedDate);
 
+        setHomeFrame();
 
         calendarViewHome.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -84,6 +89,9 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
                 String formattedDate = df.format(dateRepresentation);
                 textViewHomeDate.setText(formattedDate);
                 calendarViewHome.setVisibility(View.INVISIBLE);
+
+                if(currentFrame.compareTo("Home") == 0)                     setHomeFrame();
+                else if (currentFrame.compareTo("AddTask") == 0)            setAddTaskFrame();
             }
         });
     }
@@ -129,9 +137,23 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
 
         if (id == R.id.nav_home) {
 
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
+            String formattedDate = df.format(c);
+            textViewHomeDate.setText(formattedDate);
+
+            currentFrame = "Home";
+
             setHomeFrame();
 
         } else if (id == R.id.nav_new) {
+
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
+            String formattedDate = df.format(c);
+            textViewHomeDate.setText(formattedDate);
+
+            currentFrame = "AddTask";
 
             setAddTaskFrame();
         }
@@ -144,45 +166,36 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
     }
 
 
-    /* -------------------------------- Home Screen ------------------------------------------------------------- */
+    /* -------------------------------- START : Home Screen ------------------------------------------------------------- */
 
     public void setHomeFrame() {
 
         calendarViewHome.setVisibility(View.INVISIBLE);
-
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
-        String formattedDate = df.format(c);
-        textViewHomeDate.setText(formattedDate);
-
         addTaskFrame.setVisibility(View.INVISIBLE);
-    }
-
-
-
-    /* -------------------------------- Add New Tasks ------------------------------------------------------------- */
-
-
-    public void setAddTaskFrame() {
-
-        calendarViewHome.setVisibility(View.INVISIBLE);
-
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
-        String formattedDate = df.format(c);
-        textViewHomeDate.setText(formattedDate);
-
-        String currentTime = java.text.DateFormat.getTimeInstance().format(new Date());
-        editTextStartTime.setText(currentTime);
-        editTextEndTime.setText(currentTime);
-
-        addTaskFrame.setVisibility(View.VISIBLE);
     }
 
 
     public void changeDate(View view) {
 
         calendarViewHome.setVisibility(View.VISIBLE);
+        addTaskFrame.setVisibility(View.INVISIBLE);
+    }
+
+
+    /* -------------------------------- END : Home Screen ------------------------------------------------------------- */
+
+    /* -------------------------------- START : Add New Tasks ------------------------------------------------------------- */
+
+
+    public void setAddTaskFrame() {
+
+        calendarViewHome.setVisibility(View.INVISIBLE);
+
+        String currentTime = java.text.DateFormat.getTimeInstance().format(new Date());
+        editTextStartTime.setText(currentTime);
+        editTextEndTime.setText(currentTime);
+
+        addTaskFrame.setVisibility(View.VISIBLE);
     }
 
 
@@ -214,4 +227,15 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
         else if(datePickerType.compareTo("start") == 0)     editTextStartTime.setText(String.format("%02d:%02d %s", (hourOfDay == 12 || hourOfDay == 0) ? 12 : hourOfDay % 12, minute, isPM ? "PM" : "AM"));
         else if(datePickerType.compareTo("end") == 0)       editTextEndTime.setText(String.format("%02d:%02d %s", (hourOfDay == 12 || hourOfDay == 0) ? 12 : hourOfDay % 12, minute, isPM ? "PM" : "AM"));
     }
+
+
+    public void submitEntry(View view) {
+        
+        String start = editTextStartTime.getText().toString();
+        String end = editTextEndTime.getText().toString();
+
+    }
+
+
+    /* -------------------------------- END : Add New Tasks ------------------------------------------------------------- */
 }
