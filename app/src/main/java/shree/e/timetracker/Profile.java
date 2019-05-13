@@ -37,6 +37,8 @@ public class Profile extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ((Today) getActivity()).setActionBarTitle("Edit Profile");
+
         prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
@@ -60,7 +62,7 @@ public class Profile extends Fragment {
             @Override
             public void onClick(View v) {
 
-                String newUser = editTextFirstname.getText().toString();
+                String newUser = editTextUsernameProfile.getText().toString();
                 String newFirst = editTextFirstname.getText().toString();
                 String newLast = editTextLastName.getText().toString();
                 String newPass1 = editTextPassword2.getText().toString();

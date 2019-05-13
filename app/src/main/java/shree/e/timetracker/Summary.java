@@ -46,6 +46,8 @@ public class Summary extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ((Today) getActivity()).setActionBarTitle("View Summary");
+
         calendarViewHome = view.findViewById(R.id.calendarViewHome);
         textViewHomeDate = view.findViewById(R.id.textViewHomeDate);
         calendarViewHome.setVisibility(View.INVISIBLE);
@@ -154,7 +156,7 @@ public class Summary extends Fragment {
     public String getDuration(int time) {
 
         String duration;
-        duration = (time/100) + "." + (time%100) + " hrs";
+        duration = (time/100) + "." + ((time%100) > 10 ? (time%100) : ("0" + (time%100))) + " hrs";
         return duration;
     }
 }

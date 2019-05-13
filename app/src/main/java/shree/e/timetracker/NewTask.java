@@ -64,6 +64,8 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ((Today) getActivity()).setActionBarTitle("New Task Entry");
+
         calendarViewNewTask = view.findViewById(R.id.calendarViewNewTask);
         textViewNewTaskDate = view.findViewById(R.id.textViewNewTaskDate);
         editTextStartTime = view.findViewById(R.id.editTextStartTime);

@@ -104,4 +104,8 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
 }
