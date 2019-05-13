@@ -141,7 +141,7 @@ public class Home extends Fragment {
                     String dbStartTime =  c.getString(1);
                     String dbEndTime = c.getString(2);
                     String finalTime = "Time - " + dbStartTime + " to " + dbEndTime;
-                    String dbDuration = "for " + c.getString(3);
+                    String dbDuration = "for " + getDuration(c.getInt(3));
                     String dbTask =  "Task - " + c.getString(4);
                     String dbNote =  "Note - " + c.getString(5);
 
@@ -152,5 +152,13 @@ public class Home extends Fragment {
         }catch(Exception e) {
             Toast.makeText(getActivity(), "Database Error - " + e.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    public String getDuration(int time) {
+
+        String duration;
+        duration = (time/100) + "." + (time%100) + " hrs";
+        return duration;
     }
 }

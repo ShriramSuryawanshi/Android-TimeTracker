@@ -178,16 +178,15 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
                 int startT = getTime(startTime);
                 int endT = getTime(endTime);
                 int durationInt = endT - startT;
-                String duration = getDuration(endT - startT);
 
-                String query = "INSERT INTO DataTable (Date, StartTime, EndTime, Duration, Task, Note) VALUES ('" + selectedDate + "', '" + startTime + "', '" + endTime + "', '" + duration + "', '" + task + "', '" + note + "')";
+                String query = "INSERT INTO DataTable (Date, StartTime, EndTime, Duration, Task, Note) VALUES ('" + selectedDate + "', '" + startTime + "', '" + endTime + "', '" + durationInt + "', '" + task + "', '" + note + "')";
 
                 if(durationInt <= 0)           Toast.makeText(getActivity(), "For any task, End Time should be greater than the Start Time.", Toast.LENGTH_SHORT).show();
                 else {
 
                     try  {
                         myDB = getActivity().openOrCreateDatabase("myDB", MODE_PRIVATE, null);
-                        myDB.execSQL("CREATE TABLE IF NOT EXISTS DataTable (Date VARCHAR, StartTime VARCHAR, EndTime VARCHAR, Duration VARCHAR, Task VARCHAR, Note VARCHAR)");
+                        myDB.execSQL("CREATE TABLE IF NOT EXISTS DataTable (Date VARCHAR, StartTime VARCHAR, EndTime VARCHAR, Duration INT, Task VARCHAR, Note VARCHAR)");
                         myDB.execSQL(query);
                         Toast.makeText(getActivity(), "Task added successfully, visit Task Details page to review.", Toast.LENGTH_SHORT).show();
                         editTextNote.setText("");
@@ -210,22 +209,12 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
 
         String[] arrOfStr = time.split("[: ]+");
 
-        if(arrOfStr[2].compareTo("PM") == 0 && Integer.parseInt(arrOfStr[0]) != 12)             arrOfStr[0] = String.valueOf(Integer.parseInt(arrOfStr[0]) + 12);
+        if(arrOfStr[2].compareTo("PM") == 0 && Integer.parseInt(arrOfStr[0]) != 12)
+            arrOfStr[0] = String.valueOf(Integer.parseInt(arrOfStr[0]) + 12);
+
         newTime = Integer.parseInt(arrOfStr[0] + arrOfStr[1]);
 
         return newTime;
-    }
-
-
-    public String getDuration(int time) {
-
-        String timeString = String.valueOf(time);
-        String duration;
-
-        if(timeString.length() == 3)    duration = timeString.substring(0, 1) + "." + timeString.substring(1) + " Hrs";
-        else                            duration = timeString.substring(0, 2) + "." + timeString.substring(2) + " Hrs";
-
-        return duration;
     }
 
 
