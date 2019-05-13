@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         final String username = editTextUsername.getText().toString();
         final String password = editTextPassword.getText().toString();
 
-        if(username.compareTo("")== 0)            Toast.makeText(this, "Error! Username can not be blank.", Toast.LENGTH_LONG).show();
-        else if(password.compareTo("") == 0)      Toast.makeText(this, "Error! Password can not be blank.", Toast.LENGTH_LONG).show();
+        if(username.compareTo("")== 0)            Toast.makeText(this, "Error! Username can not be blank.", Toast.LENGTH_SHORT).show();
+        else if(password.compareTo("") == 0)      Toast.makeText(this, "Error! Password can not be blank.", Toast.LENGTH_SHORT).show();
         else {
 
             String savedUser = prefs.getString("savedUser", "");
@@ -45,20 +45,19 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("savedUser", username);
                     editor.putString("savedPass", password);
                     editor.apply();
-                    Toast.makeText(this, "Welcome to TimeTracker!", Toast.LENGTH_LONG).show();
-                    // Show add tasklist page
+                    Toast.makeText(this, "New account created for you! Welcome to TimeTracker!", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(MainActivity.this, Today.class));
             }
             else {
 
                 if(username.compareTo(savedUser) == 0 && password.compareTo(savedPass) == 0) {
-                    Toast.makeText(this, "Welcome back to TimeTracker!", Toast.LENGTH_LONG).show();
-                    // Show main window
+                    Toast.makeText(this, "Welcome back to TimeTracker!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, Today.class));
                 }
                 else {
                     editTextUsername.setText("");
                     editTextPassword.setText("");
-                    Toast.makeText(this, "Error! Invalid login credentials! Try again!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Error! Invalid login credentials! Try again!", Toast.LENGTH_SHORT).show();
                 }
             }
         }

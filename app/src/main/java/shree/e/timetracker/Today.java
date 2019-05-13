@@ -95,6 +95,7 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
         else if (id == R.id.nav_new)         fragment = new NewTask();
         else if (id == R.id.nav_summary)     fragment = new Summary();
         else if (id == R.id.nav_settings)    fragment = new EditTaskList();
+        else if (id == R.id.nav_profile)     fragment = new Profile();
 
         if(fragment != null) {
 

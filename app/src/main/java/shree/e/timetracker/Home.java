@@ -141,7 +141,7 @@ public class Home extends Fragment {
                     String dbStartTime =  c.getString(1);
                     String dbEndTime = c.getString(2);
                     String finalTime = "Time - " + dbStartTime + " to " + dbEndTime;
-                    String dbDuration = "for " + getDuration(c.getInt(3));
+                    String dbDuration = getDuration(c.getInt(3));
                     String dbTask =  c.getString(4);
                     String dbNote =  "Details - " + c.getString(5);
 
