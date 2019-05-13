@@ -114,7 +114,7 @@ public class Home extends Fragment {
     }
 
     private ArrayList<DataObject1> getDataSet() {
-        ArrayList results = new ArrayList<DataObject>();
+        ArrayList results = new ArrayList<DataObject1>();
         for (int index = 0; index < taskList.size(); index++) {
             row = taskList.get(index);
             DataObject1 obj = new DataObject1(row[0], row[1], row[2], row[3]);
@@ -142,8 +142,8 @@ public class Home extends Fragment {
                     String dbEndTime = c.getString(2);
                     String finalTime = "Time - " + dbStartTime + " to " + dbEndTime;
                     String dbDuration = "for " + getDuration(c.getInt(3));
-                    String dbTask =  "Task - " + c.getString(4);
-                    String dbNote =  "Note - " + c.getString(5);
+                    String dbTask =  c.getString(4);
+                    String dbNote =  "Details - " + c.getString(5);
 
                     taskList.add(new String[] {dbTask, finalTime, dbDuration, dbNote});
                     c.moveToNext();
