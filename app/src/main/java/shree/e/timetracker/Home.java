@@ -18,7 +18,6 @@ import java.util.Date;
 public class Home extends Fragment {
 
     CalendarView calendarViewHome;
-
     TextView textViewHomeDate;
 
     @Nullable
@@ -33,9 +32,7 @@ public class Home extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         calendarViewHome = view.findViewById(R.id.calendarViewHome);
-
         textViewHomeDate = view.findViewById(R.id.textViewHomeDate);
-
         calendarViewHome.setVisibility(View.INVISIBLE);
 
         Date c = Calendar.getInstance().getTime();

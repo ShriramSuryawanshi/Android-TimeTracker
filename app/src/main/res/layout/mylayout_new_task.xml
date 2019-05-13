@@ -51,6 +51,26 @@
         android:layout_marginEnd="17dp"
         android:layout_marginRight="17dp">
 
+        <Spinner
+            android:id="@+id/editTextTaskList"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="74dp"
+            android:layout_marginLeft="74dp"
+            android:layout_marginTop="132dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:ems="10"
+            android:singleLine="true"
+            android:spinnerMode="dropdown"
+            android:textColor="@android:color/background_dark"
+            android:textSize="12sp" />
+
         <TextView
             android:id="@+id/textView5"
             android:layout_width="89dp"

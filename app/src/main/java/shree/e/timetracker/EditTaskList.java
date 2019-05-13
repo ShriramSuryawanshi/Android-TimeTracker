@@ -58,7 +58,7 @@ public class EditTaskList extends Fragment {
         lastCount = 0;
         taskList.clear();
 
-        for(int i = 1; i < 11; i++) {
+        for(int i = 1; i < 100; i++) {
 
             String key = "Task" + i;
             String savedTask = prefs.getString(key, "");
@@ -89,34 +89,30 @@ public class EditTaskList extends Fragment {
                 if(newTask.compareTo("") == 0)      Toast.makeText(getActivity(), "Error! Task name can not be blank.", Toast.LENGTH_SHORT).show();
                 else {
 
-                    if(lastCount >= 10)             Toast.makeText(getActivity(), "Only 10 tasks can be added to the list.", Toast.LENGTH_SHORT).show();
-                    else {
+                    String key = "Task" + lastCount;
+                    editor.putString(key, newTask);
+                    editor.apply();
+                    Toast.makeText(getActivity(), "Task list is updated!", Toast.LENGTH_SHORT).show();
 
-                        String key = "Task" + lastCount;
-                        editor.putString(key, newTask);
-                        editor.apply();
-                        Toast.makeText(getActivity(), "Task list is updated!", Toast.LENGTH_SHORT).show();
+                    lastCount = 0;
+                    taskList.clear();
 
-                        lastCount = 0;
-                        taskList.clear();
+                    for(int i = 1; i < 100; i++) {
 
-                        for(int i = 1; i < 11; i++) {
+                        key = "Task" + i;
+                        String savedTask = prefs.getString(key, "");
 
-                            key = "Task" + i;
-                            String savedTask = prefs.getString(key, "");
-
-                            if(savedTask.compareTo("") == 0) {
-                                lastCount = i;
-                                break;
-                            }
-                            taskList.add(savedTask);
+                        if(savedTask.compareTo("") == 0) {
+                            lastCount = i;
+                            break;
                         }
-
-                        Collections.sort(taskList);
-
-                        mAdapter = new MyRecyclerViewAdapter(getDataSet());
-                        mRecyclerView.setAdapter(mAdapter);
+                        taskList.add(savedTask);
                     }
+
+                    Collections.sort(taskList);
+
+                    mAdapter = new MyRecyclerViewAdapter(getDataSet());
+                    mRecyclerView.setAdapter(mAdapter);
                 }
             }
         });

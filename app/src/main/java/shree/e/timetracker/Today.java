@@ -38,10 +38,6 @@ import java.util.Date;
 
 public class Today extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String currentFrame = "Home";
-
-    SQLiteDatabase myDB;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -55,14 +51,6 @@ public class Today extends AppCompatActivity implements NavigationView.OnNavigat
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-        try  {
-            myDB = this.openOrCreateDatabase("myDB", MODE_PRIVATE, null);
-            myDB.execSQL("CREATE TABLE IF NOT EXISTS Summary (Date VARCHAR PRIMARY KEY, Task1 VARCHAR, Task2 VARCHAR, Task3 VARCHAR, Task4 VARCHAR, Task5 VARCHAR, Task6 VARCHAR, Task7 VARCHAR, Task8 VARCHAR, Task9 VARCHAR, Task10 VARCHAR)");
-        }
-        catch(Exception e) {
-            Toast.makeText(this, "Database Error - " + e.toString(), Toast.LENGTH_LONG).show();
-        }
     }
 
 
