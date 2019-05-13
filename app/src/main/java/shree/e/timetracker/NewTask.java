@@ -1,6 +1,7 @@
 package shree.e.timetracker;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -102,6 +104,8 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
         textViewNewTaskDate.setText(formattedDate);
 
         String currentTime = java.text.DateFormat.getTimeInstance().format(new Date());
+        String[] arrOfStr = currentTime.split("[: ]+");
+        currentTime = arrOfStr[0] + ":" + arrOfStr[1] + " " + arrOfStr[3];
         editTextStartTime.setText(currentTime);
         editTextEndTime.setText(currentTime);
 
@@ -173,41 +177,28 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
 
                 int startT = getTime(startTime);
                 int endT = getTime(endTime);
-                int duration = endT - startT;
+                int durationInt = endT - startT;
+                String duration = getDuration(endT - startT);
 
-                String query = "INSERT INTO DataTable (Date, StartTime, EndTime, Duration, Task, Note) VALUES ('" + selectedDate + "', " + startT + ", " + endT + ", " + duration + ", '" + task + "', '" + note + "')";
-                System.out.println(query);
+                String query = "INSERT INTO DataTable (Date, StartTime, EndTime, Duration, Task, Note) VALUES ('" + selectedDate + "', '" + startTime + "', '" + endTime + "', '" + duration + "', '" + task + "', '" + note + "')";
 
-                if(duration <= 0)           Toast.makeText(getActivity(), "For any task, End Time should be greater than the Start Time.", Toast.LENGTH_SHORT).show();
+                if(durationInt <= 0)           Toast.makeText(getActivity(), "For any task, End Time should be greater than the Start Time.", Toast.LENGTH_SHORT).show();
                 else {
 
                     try  {
                         myDB = getActivity().openOrCreateDatabase("myDB", MODE_PRIVATE, null);
-                        myDB.execSQL("CREATE TABLE IF NOT EXISTS DataTable (Date VARCHAR, StartTime INT(10), EndTime INT(10), Duration INT(10), Task VARCHAR, Note VARCHAR)");
+                        myDB.execSQL("CREATE TABLE IF NOT EXISTS DataTable (Date VARCHAR, StartTime VARCHAR, EndTime VARCHAR, Duration VARCHAR, Task VARCHAR, Note VARCHAR)");
                         myDB.execSQL(query);
                         Toast.makeText(getActivity(), "Task added successfully, visit Task Details page to review.", Toast.LENGTH_SHORT).show();
                         editTextNote.setText("");
-
-                        /*Cursor c = myDB.rawQuery("SELECT * FROM DataTable", null);
-                        c.moveToFirst();
-                        int count = c.getCount();
-
-                        for(int i = 0; i < count; i++) {
-
-                            Log.i("Result - 1 ", c.getString(0));
-                            Log.i("Result - 2 ", String.valueOf(c.getInt(1)));
-                            Log.i("Result - 3 ", String.valueOf(c.getInt(2)));
-                            Log.i("Result - 4 ", String.valueOf(c.getInt(3)));
-                            Log.i("Result - 5 ", c.getString(4));
-                            Log.i("Result - 6 ", c.getString(5));
-
-                            c.moveToNext();
-                        } */
                     }
                     catch(Exception e) {
                         Toast.makeText(getActivity(), "Database Error - " + e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
+
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
     }
@@ -220,10 +211,21 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
         String[] arrOfStr = time.split("[: ]+");
 
         if(arrOfStr[2].compareTo("PM") == 0 && Integer.parseInt(arrOfStr[0]) != 12)             arrOfStr[0] = String.valueOf(Integer.parseInt(arrOfStr[0]) + 12);
-        Toast.makeText(getActivity(), arrOfStr[0] + ", " + arrOfStr[1], Toast.LENGTH_SHORT).show();
         newTime = Integer.parseInt(arrOfStr[0] + arrOfStr[1]);
 
         return newTime;
+    }
+
+
+    public String getDuration(int time) {
+
+        String timeString = String.valueOf(time);
+        String duration;
+
+        if(timeString.length() == 3)    duration = timeString.substring(0, 1) + "." + timeString.substring(1) + " Hrs";
+        else                            duration = timeString.substring(0, 2) + "." + timeString.substring(2) + " Hrs";
+
+        return duration;
     }
 
 

@@ -1,5 +1,6 @@
 package shree.e.timetracker;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -84,36 +86,40 @@ public class EditTaskList extends Fragment {
             @Override
             public void onClick(View v) {
 
-                String newTask = editTextTaskTitle.getText().toString();
+            String newTask = editTextTaskTitle.getText().toString();
 
-                if(newTask.compareTo("") == 0)      Toast.makeText(getActivity(), "Error! Task name can not be blank.", Toast.LENGTH_SHORT).show();
-                else {
+            if(newTask.compareTo("") == 0)      Toast.makeText(getActivity(), "Error! Task name can not be blank.", Toast.LENGTH_SHORT).show();
+            else {
 
-                    String key = "Task" + lastCount;
-                    editor.putString(key, newTask);
-                    editor.apply();
-                    Toast.makeText(getActivity(), "Task list is updated!", Toast.LENGTH_SHORT).show();
+                String key = "Task" + lastCount;
+                editor.putString(key, newTask);
+                editor.apply();
+                editTextTaskTitle.setText("");
+                Toast.makeText(getActivity(), "Task list is updated!", Toast.LENGTH_SHORT).show();
 
-                    lastCount = 0;
-                    taskList.clear();
+                lastCount = 0;
+                taskList.clear();
 
-                    for(int i = 1; i < 100; i++) {
+                for(int i = 1; i < 100; i++) {
 
-                        key = "Task" + i;
-                        String savedTask = prefs.getString(key, "");
+                    key = "Task" + i;
+                    String savedTask = prefs.getString(key, "");
 
-                        if(savedTask.compareTo("") == 0) {
-                            lastCount = i;
-                            break;
-                        }
-                        taskList.add(savedTask);
+                    if(savedTask.compareTo("") == 0) {
+                        lastCount = i;
+                        break;
                     }
-
-                    Collections.sort(taskList);
-
-                    mAdapter = new MyRecyclerViewAdapter(getDataSet());
-                    mRecyclerView.setAdapter(mAdapter);
+                    taskList.add(savedTask);
                 }
+
+                Collections.sort(taskList);
+
+                mAdapter = new MyRecyclerViewAdapter(getDataSet());
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
     }

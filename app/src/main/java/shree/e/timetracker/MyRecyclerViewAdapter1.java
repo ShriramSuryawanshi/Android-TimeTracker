@@ -1,6 +1,9 @@
 package shree.e.timetracker;
 
+
+
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,20 +11,25 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MyRecyclerViewAdapter extends RecyclerView
-        .Adapter<MyRecyclerViewAdapter
-        .DataObjectHolder> {
-    private ArrayList<DataObject> mDataset;
+public class MyRecyclerViewAdapter1 extends RecyclerView
+        .Adapter<MyRecyclerViewAdapter1
+        .DataObjectHolder>  {
+
+    private ArrayList<DataObject1> mDataset;
     private static MyClickListener myClickListener;
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView label;
-        TextView dateTime;
+        TextView task;
+        TextView time;
+        TextView duration;
+        TextView note;
 
         public DataObjectHolder(View itemView) {
             super(itemView);
-            label = (TextView) itemView.findViewById(R.id.textView);
-            dateTime = (TextView) itemView.findViewById(R.id.textView2);
+            task = (TextView) itemView.findViewById(R.id.textView);
+            time = (TextView) itemView.findViewById(R.id.textView2);
+            duration = (TextView) itemView.findViewById(R.id.textViewDuration);
+            note = (TextView) itemView.findViewById(R.id.textViewNote);
             itemView.setOnClickListener(this);
         }
 
@@ -35,7 +43,7 @@ public class MyRecyclerViewAdapter extends RecyclerView
         this.myClickListener = myClickListener;
     }
 
-    public MyRecyclerViewAdapter(ArrayList<DataObject> myDataset) {
+    public MyRecyclerViewAdapter1(ArrayList<DataObject1> myDataset) {
         mDataset = myDataset;
     }
 
@@ -43,7 +51,7 @@ public class MyRecyclerViewAdapter extends RecyclerView
     public DataObjectHolder onCreateViewHolder(ViewGroup parent,
                                                int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view_row, parent, false);
+                .inflate(R.layout.card_view_row1, parent, false);
 
         DataObjectHolder dataObjectHolder = new DataObjectHolder(view);
         return dataObjectHolder;
@@ -51,11 +59,13 @@ public class MyRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.label.setText(mDataset.get(position).getmText1());
-        holder.dateTime.setText(mDataset.get(position).getmText2());
+        holder.task.setText(mDataset.get(position).getmText1());
+        holder.time.setText(mDataset.get(position).getmText2());
+        holder.duration.setText(mDataset.get(position).getmText3());
+        holder.note.setText(mDataset.get(position).getmText4());
     }
 
-    public void addItem(DataObject dataObj, int index) {
+    public void addItem(DataObject1 dataObj, int index) {
         mDataset.add(index, dataObj);
         notifyItemInserted(index);
     }
