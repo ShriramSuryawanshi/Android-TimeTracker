@@ -2,12 +2,14 @@ package shree.e.timetracker;
 
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteTransactionListener;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,14 +124,6 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
         });
 
 
-        try  {
-            myDB = getActivity().openOrCreateDatabase("myDB", MODE_PRIVATE, null);
-            myDB.execSQL("CREATE TABLE IF NOT EXISTS Summary (Date VARCHAR PRIMARY KEY, Task1 VARCHAR, Task2 VARCHAR, Task3 VARCHAR, Task4 VARCHAR, Task5 VARCHAR, Task6 VARCHAR, Task7 VARCHAR, Task8 VARCHAR, Task9 VARCHAR, Task10 VARCHAR)");
-        }
-        catch(Exception e) {
-            Toast.makeText(getActivity(), "Database Error - " + e.toString(), Toast.LENGTH_LONG).show();
-        }
-
         textViewNewTaskDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,10 +159,75 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
                 timePicker.show(getFragmentManager(), "End Time Picker");
             }
         });
+
+
+        buttonSubmitEntry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String selectedDate = textViewNewTaskDate.getText().toString();
+                String startTime = editTextStartTime.getText().toString();
+                String endTime = editTextEndTime.getText().toString();
+                String task = dropdown.getSelectedItem().toString();
+                String note = editTextNote.getText().toString();
+
+                int startT = getTime(startTime);
+                int endT = getTime(endTime);
+                int duration = endT - startT;
+
+                String query = "INSERT INTO DataTable (Date, StartTime, EndTime, Duration, Task, Note) VALUES ('" + selectedDate + "', " + startT + ", " + endT + ", " + duration + ", '" + task + "', '" + note + "')";
+                System.out.println(query);
+
+                if(duration <= 0)           Toast.makeText(getActivity(), "For any task, End Time should be greater than the Start Time.", Toast.LENGTH_SHORT).show();
+                else {
+
+                    try  {
+                        myDB = getActivity().openOrCreateDatabase("myDB", MODE_PRIVATE, null);
+                        myDB.execSQL("CREATE TABLE IF NOT EXISTS DataTable (Date VARCHAR, StartTime INT(10), EndTime INT(10), Duration INT(10), Task VARCHAR, Note VARCHAR)");
+                        myDB.execSQL(query);
+                        Toast.makeText(getActivity(), "Task added successfully, visit Task Details page to review.", Toast.LENGTH_SHORT).show();
+                        editTextNote.setText("");
+
+                        /*Cursor c = myDB.rawQuery("SELECT * FROM DataTable", null);
+                        c.moveToFirst();
+                        int count = c.getCount();
+
+                        for(int i = 0; i < count; i++) {
+
+                            Log.i("Result - 1 ", c.getString(0));
+                            Log.i("Result - 2 ", String.valueOf(c.getInt(1)));
+                            Log.i("Result - 3 ", String.valueOf(c.getInt(2)));
+                            Log.i("Result - 4 ", String.valueOf(c.getInt(3)));
+                            Log.i("Result - 5 ", c.getString(4));
+                            Log.i("Result - 6 ", c.getString(5));
+
+                            c.moveToNext();
+                        } */
+                    }
+                    catch(Exception e) {
+                        Toast.makeText(getActivity(), "Database Error - " + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
+
+    public int getTime(String time) {
+
+        int newTime;
+
+        String[] arrOfStr = time.split("[: ]+");
+
+        if(arrOfStr[2].compareTo("PM") == 0 && Integer.parseInt(arrOfStr[0]) != 12)             arrOfStr[0] = String.valueOf(Integer.parseInt(arrOfStr[0]) + 12);
+        Toast.makeText(getActivity(), arrOfStr[0] + ", " + arrOfStr[1], Toast.LENGTH_SHORT).show();
+        newTime = Integer.parseInt(arrOfStr[0] + arrOfStr[1]);
+
+        return newTime;
     }
 
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        // don't delete this
+        // don't delete this - @shree
     }
 }
