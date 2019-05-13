@@ -129,6 +129,7 @@ public class Summary extends Fragment {
         try  {
 
             myDB = getActivity().openOrCreateDatabase("myDB", MODE_PRIVATE, null);
+            myDB.execSQL("CREATE TABLE IF NOT EXISTS DataTable (Date VARCHAR, StartTime VARCHAR, EndTime VARCHAR, Duration INT, Task VARCHAR, Note VARCHAR)");
             Cursor c = myDB.rawQuery("SELECT Task, SUM(Duration) FROM DataTable WHERE Date = '" + date + "' " + "GROUP BY Task", null);
             c.moveToFirst();
 

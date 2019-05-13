@@ -129,6 +129,7 @@ public class Home extends Fragment {
         try  {
 
             myDB = getActivity().openOrCreateDatabase("myDB", MODE_PRIVATE, null);
+            myDB.execSQL("CREATE TABLE IF NOT EXISTS DataTable (Date VARCHAR, StartTime VARCHAR, EndTime VARCHAR, Duration INT, Task VARCHAR, Note VARCHAR)");
             Cursor c = myDB.rawQuery("SELECT * FROM DataTable WHERE Date = '" + date + "'", null);
             c.moveToFirst();
 

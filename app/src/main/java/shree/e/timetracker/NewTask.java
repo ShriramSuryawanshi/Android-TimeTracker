@@ -94,6 +94,10 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
             taskList.add(savedTask);
         }
 
+        if(taskList.size() == 0) {
+            Toast.makeText(getActivity(), "Please add tasks to the task list first!", Toast.LENGTH_LONG).show();
+        }
+
         Collections.sort(taskList);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, taskList);
         dropdown.setAdapter(adapter);
@@ -113,17 +117,21 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month,int dayOfMonth) {
 
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.YEAR, year);
-                cal.set(Calendar.MONTH, month);
-                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                Date dateRepresentation = cal.getTime();
-                SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
-                String formattedDate = df.format(dateRepresentation);
+                if(taskList.size() == 0)    Toast.makeText(getActivity(), "Please add tasks to the task list first!", Toast.LENGTH_LONG).show();
+                else {
 
-                textViewNewTaskDate.setText(formattedDate);
-                calendarViewNewTask.setVisibility(View.INVISIBLE);
-                frameNewTask.setVisibility(View.VISIBLE);
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.YEAR, year);
+                    cal.set(Calendar.MONTH, month);
+                    cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    Date dateRepresentation = cal.getTime();
+                    SimpleDateFormat df = new SimpleDateFormat("EEEE - MMMM dd, yyyy");
+                    String formattedDate = df.format(dateRepresentation);
+
+                    textViewNewTaskDate.setText(formattedDate);
+                    calendarViewNewTask.setVisibility(View.INVISIBLE);
+                    frameNewTask.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -131,8 +139,13 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
         textViewNewTaskDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendarViewNewTask.setVisibility(View.VISIBLE);
-                frameNewTask.setVisibility(View.INVISIBLE);
+
+                if(taskList.size() == 0)    Toast.makeText(getActivity(), "Please add tasks to the task list first!", Toast.LENGTH_LONG).show();
+                else {
+
+                    calendarViewNewTask.setVisibility(View.VISIBLE);
+                    frameNewTask.setVisibility(View.INVISIBLE);
+                }
             }
         });
 
@@ -141,12 +154,16 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
             @Override
             public void onClick(View v) {
 
-                Bundle args = new Bundle();
-                args.putString("Type", "Start");
+                if(taskList.size() == 0)    Toast.makeText(getActivity(), "Please add tasks to the task list first!", Toast.LENGTH_LONG).show();
+                else {
 
-                DialogFragment timePicker = new TimePickerFragment();
-                timePicker.setArguments(args);
-                timePicker.show(getFragmentManager(), "Start Time Picker");
+                    Bundle args = new Bundle();
+                    args.putString("Type", "Start");
+
+                    DialogFragment timePicker = new TimePickerFragment();
+                    timePicker.setArguments(args);
+                    timePicker.show(getFragmentManager(), "Start Time Picker");
+                }
             }
         });
 
@@ -155,12 +172,16 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
             @Override
             public void onClick(View v) {
 
-                Bundle args = new Bundle();
-                args.putString("Type", "End");
+                if(taskList.size() == 0)    Toast.makeText(getActivity(), "Please add tasks to the task list first!", Toast.LENGTH_LONG).show();
+                else {
 
-                DialogFragment timePicker = new TimePickerFragment();
-                timePicker.setArguments(args);
-                timePicker.show(getFragmentManager(), "End Time Picker");
+                    Bundle args = new Bundle();
+                    args.putString("Type", "End");
+
+                    DialogFragment timePicker = new TimePickerFragment();
+                    timePicker.setArguments(args);
+                    timePicker.show(getFragmentManager(), "End Time Picker");
+                }
             }
         });
 
@@ -169,35 +190,41 @@ public class NewTask extends Fragment implements TimePickerDialog.OnTimeSetListe
             @Override
             public void onClick(View v) {
 
-                String selectedDate = textViewNewTaskDate.getText().toString();
-                String startTime = editTextStartTime.getText().toString();
-                String endTime = editTextEndTime.getText().toString();
-                String task = dropdown.getSelectedItem().toString();
-                String note = editTextNote.getText().toString();
-
-                int startT = getTime(startTime);
-                int endT = getTime(endTime);
-                int durationInt = endT - startT;
-
-                String query = "INSERT INTO DataTable (Date, StartTime, EndTime, Duration, Task, Note) VALUES ('" + selectedDate + "', '" + startTime + "', '" + endTime + "', '" + durationInt + "', '" + task + "', '" + note + "')";
-
-                if(durationInt <= 0)           Toast.makeText(getActivity(), "For any task, End Time should be greater than the Start Time.", Toast.LENGTH_SHORT).show();
+                if(taskList.size() == 0)    Toast.makeText(getActivity(), "Please add tasks to the task list first!", Toast.LENGTH_LONG).show();
                 else {
 
-                    try  {
-                        myDB = getActivity().openOrCreateDatabase("myDB", MODE_PRIVATE, null);
-                        myDB.execSQL("CREATE TABLE IF NOT EXISTS DataTable (Date VARCHAR, StartTime VARCHAR, EndTime VARCHAR, Duration INT, Task VARCHAR, Note VARCHAR)");
-                        myDB.execSQL(query);
-                        Toast.makeText(getActivity(), "Task added successfully, visit Task Details page to review.", Toast.LENGTH_SHORT).show();
-                        editTextNote.setText("");
-                    }
-                    catch(Exception e) {
-                        Toast.makeText(getActivity(), "Database Error - " + e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
+                    String selectedDate = textViewNewTaskDate.getText().toString();
+                    String startTime = editTextStartTime.getText().toString();
+                    String endTime = editTextEndTime.getText().toString();
+                    String task = dropdown.getSelectedItem().toString();
+                    String note = editTextNote.getText().toString();
 
-                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    int startT = getTime(startTime);
+                    int endT = getTime(endTime);
+                    int durationInt = endT - startT;
+
+                    String query = "INSERT INTO DataTable (Date, StartTime, EndTime, Duration, Task, Note) VALUES ('" + selectedDate + "', '" + startTime + "', '" + endTime + "', '" + durationInt + "', '" + task + "', '" + note + "')";
+
+                    if (durationInt <= 0)
+                        Toast.makeText(getActivity(), "For any task, End Time should be greater than the Start Time.", Toast.LENGTH_SHORT).show();
+                    else if (task.compareTo("") == 0)
+                        Toast.makeText(getActivity(), "Please edit the task list first, task can not be empty.", Toast.LENGTH_SHORT).show();
+                    else {
+
+                        try {
+                            myDB = getActivity().openOrCreateDatabase("myDB", MODE_PRIVATE, null);
+                            myDB.execSQL("CREATE TABLE IF NOT EXISTS DataTable (Date VARCHAR, StartTime VARCHAR, EndTime VARCHAR, Duration INT, Task VARCHAR, Note VARCHAR)");
+                            myDB.execSQL(query);
+                            Toast.makeText(getActivity(), "Task added successfully, visit Task Details page to review.", Toast.LENGTH_SHORT).show();
+                            editTextNote.setText("");
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(), "Database Error - " + e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
             }
         });
     }

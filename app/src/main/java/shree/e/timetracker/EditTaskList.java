@@ -1,6 +1,7 @@
 package shree.e.timetracker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -144,5 +145,10 @@ public class EditTaskList extends Fragment {
             results.add(index, obj);
         }
         return results;
+    }
+
+    public static void Launch(Context c) {
+        Intent newIncome = new Intent(c, EditTaskList.class);
+        c.startActivity(newIncome);
     }
 }
